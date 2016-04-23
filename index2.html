@@ -2,11 +2,14 @@
 <html>
 
 <head>
+    
+    
+    
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-
+    <link type="text/css" rel="stylesheet" href="component.css" />
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
     <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="javascript.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -16,25 +19,29 @@
 
 <body>
 
-    <div class="container">
-        <div class="row">
+    <div class="container-fluid">
+        <div class="row col-md-4 col-md-offset-4">
 
-            <div id="title col-md-8 col-md-offset-2">
-                <a href="index.html" id="titulo">MusicMates</a>
+            <div class="title">
+                <a href="index.html">MusicMates</a>
             </div>
-            <div id="procura1">
-                <input type="text" class="input" placeholder="Utilizador 1" id="name" />
+            
+            <div class="username-search col-md-4 col-md-offset-4" id="myUsername">
+                <input type="text" class="input" placeholder="Utilizador 1" id="name1"/>
+                <button type="button" class="button" id="searchuser1info" >Pesquisar</button>
             </div>
-
-            <div id="options">
-                <button type="button" class="button" id="searchuserinfo">Pesquisar</button>
+            
+            <div class="username-search col-md-4 col-md-offset-4" id="yourUsername">
+                <input type="text" class="input" placeholder="Utilizador 2" id="name2"/>
+                <button type="button" class="button" id="searchuser2info" >Pesquisar</button>
             </div>
+            
             <div id="status"></div>
         </div>
-        
-        
     </div>
 
+    
+    
     <div id="perf">
         <div id="tit">
             <a style="text-decoration: none; color:white;" href="index.html">MusicMates</a> </div>

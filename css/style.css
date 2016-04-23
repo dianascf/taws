@@ -1,0 +1,24 @@
+@font-face {
+	font-family: 'ClearSans';
+	src: url('fonts/ClearSans-Bold.ttf');
+	font-weight: Bold;
+	font-style: normal;	
+}
+
+@font-face {
+	font-family: 'ClearSans';
+	src: url('fonts/ClearSans-Medium.ttf');
+	font-weight: Medium;
+	font-style: normal;	
+}
+
+#title {
+	margin-top: 20%;
+	text-align: center;
+	font-family: 'ClearSans';
+    font-weight: bold;
+	font-size: 4em;
+	color: white;
+	z-index:5;	
+	text-decoration: none;
+}

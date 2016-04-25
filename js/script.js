@@ -120,6 +120,8 @@ function generatePage() {
 }
 
 
+
+
 //  ---------------------------------------------------------------------------------------------------------
 // USER top artists
 // ---------------------------------------------------------------------------------------------------------
@@ -156,6 +158,7 @@ function processUser1TopArtists(data) {
         for (var i = 0; i < data.topartists.artist.length; i++) {
             topartists1[i] = {
                 artist: data.topartists.artist[i].name,
+                image: data.topartists.artist[i].image[3]["#text"],
                 plays: data.topartists.artist[i].playcount
             }
         }
@@ -206,6 +209,7 @@ function processUser2TopArtists(data) {
         for (var i = 0; i < data.topartists.artist.length; i++) {
             topartists2[i] = {
                 artist: data.topartists.artist[i].name,
+                image: data.topartists.artist[i].image[3]["#text"],
                 plays: data.topartists.artist[i].playcount
             }
         }
@@ -232,6 +236,7 @@ function generateTop10() {
             if (topartists1[i].artist == topartists2[i2].artist) {
                 topartistsboth[add] = {
                     artist: topartists1[i].artist,
+                    image: topartists1[i].image,
                     plays: parseFloat(topartists1[i].plays / playcount1) + parseFloat(topartists2[i2].plays / playcount2)
                 }
                 add++;
@@ -265,7 +270,266 @@ function generateTop10() {
     $(".page-load").hide();
     $(".login").hide();
     $(".page-content").show();
+    
+processBothUsersTopArtists();
 }
+
+
+
+
+function processBothUsersTopArtists() {
+    
+    var bothusersartist = new Array();
+    for(var i=0; i < 10; i++){
+        bothusersartist[i] = "{\"label\" : \""+topartistsboth[i].artist+"\", \"value\": \""+topartistsboth[i].plays*(playcount1+playcount2)+"\"}";
+    }
+
+    var jsonbothusersartist = "[{ \"data\":  ["+bothusersartist+"]}];";  
+        
+    $(document).ready(function() {
+
+    (function( $ ){
+        var methods = {
+        el: "",
+        init: function(options){            
+        var clone = options["data"].slice(0);
+        var that = this;    
+        w = options["width"];
+        h = options["height"];
+        methods.el = this;
+        methods.setup(clone, w, h);
+    },
+
+    resizeChart: function(){
+        var svg = $('.bubblechart');
+        var aspect = svg.width() / svg.height();
+        var targetWidth = svg.parent().parent().width();
+        if(targetWidth!=null){
+            svg.attr("width", targetWidth);
+            svg.attr("height", Math.round(targetWidth / aspect));
+        }
+    },
+
+    funnelData: function(data, width, height){
+            function getRandom(min, max){
+                return Math.floor(Math.random() * (max - min + 1)) + min;                   
+            }
+            var max_amount = d3.max(data, function (d) { return parseInt(d.value)})
+            var radius_scale = d3.scale.pow().exponent(0.5).domain([0, max_amount]).range([2, 85])
+            $.each(data, function(index, elem) {
+                elem.radius = radius_scale(elem.value)*1.5;
+                elem.all = 'all';
+                elem.x = getRandom(0, width); 
+                elem.y = getRandom(0, height);
+            });     
+            return data;
+    },  
+
+    getMargin: function(){
+        var margin = {top: 30, right: 55, bottom: 50, left: 95};
+        return margin;
+    },
+
+    setup: function(data, w, h){
+        methods.width = w;
+        methods.height = h;
+        methods.fill = d3.scale.ordinal()
+        
+        
+        var margin = methods.getMargin();   
+        var selector = methods.el["selector"];  
+        var svg = d3.select(selector)
+            .append("svg")
+                .attr("class", "bubblechart")
+                .attr("width", parseInt(methods.width + margin.left + margin.right,10))
+                .attr("height", parseInt(methods.height + margin.top + margin.bottom,10))
+                .attr('viewBox', "0 0 "+parseInt(methods.width + margin.left + margin.right,10)+" "+parseInt(methods.height + margin.top + margin.bottom,10))
+                .attr('perserveAspectRatio', "xMinYMid")
+            .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            methods.force = d3.layout.force()
+              .charge(1000)
+              .gravity(100)
+              .size([methods.width, methods.height])
+            var bubbleholder = svg.append("g")
+                    .attr("class", "bubbleholder")
+            var bubbles = bubbleholder.append("g")
+                    .attr("class", "bubbles")
+            var labelbubble = bubbleholder.append("g")
+                    .attr("class", "labelbubble")
+            methods.animateBubbles(selector, data); 
+    },
+
+    update: function(data){
+        var selector = methods.el["selector"];
+        //console.log("new data", data);
+        methods.animateBubbles(selector, data);                      
+    },
+
+    animateBubbles: function(selector, data){
+        data = this.funnelData(data, methods.width, methods.height);
+            var padding = 4;
+            var maxRadius = d3.max(data, function (d) { return parseInt(d.radius)});
+            var year_centers = {
+              "2008": {name:"2008", x: 150, y: 300},
+              "2009": {name:"2009", x: 550, y: 300},
+              "2010": {name:"2010", x: 900, y: 300}
+            }
+        var all_center = { "all": {name:"All Grants", x: methods.width/2, y: methods.height/2}};
+        var bubbleholder = d3.select(selector + " .bubbleholder");
+        var bubbles = d3.select(selector + " .bubbles");
+        var labelbubble = d3.select(selector + " .labelbubble");
+        var nodes = bubbles.selectAll("circle")
+        .data(data);
+        // Enter
+        nodes.enter()
+            .append("circle")
+             .attr("class", "node")
+              .attr("cx", function (d) { return d.x; })
+              .attr("cy", function (d) { return d.y; })
+              .attr("r", 1)
+              .style("fill", function (d) { return methods.fill(d.label); })
+              .call(methods.force.drag);
+        // Update
+        nodes
+            .transition()
+            .delay(300)
+            .duration(1000)
+              .attr("r", function (d) { return d.radius; })
+        // Exit
+        nodes.exit()
+            .transition()
+            .duration(250)
+            .attr("cx", function (d) { return d.x; })
+            .attr("cy", function (d) { return d.y; })
+            .attr("r", 1)
+            .remove();
+        var labels = labelbubble.selectAll("text")
+          .data(data);                      
+        // Enter
+        labels.enter()
+            .append("text")
+            .attr("class", "title")
+            .style("fill","white")
+                .text(function(d) { return d.label; })                               
+                .attr("x", function (d) { return d.x; })
+                .attr("y", function (d) { return d.y; })
+                .attr("text-anchor", "middle") 
+                .attr("alignment-baseline", "middle") 
+        // Update
+        labels
+            .transition()
+            .delay(600)
+            .duration(1000)
+        //  .attr("x", function (d) { return d.x; })
+        //  .attr("y", function (d) { return d.y; })  
+        // Exit
+        labels.exit()
+            .transition()
+            .duration(250)
+            .remove();    
+        draw('all');
+        
+    function draw (varname) {
+        var foci = varname === "all" ? all_center: year_centers;
+      methods.force.on("tick", tick(foci, varname, .55));
+      methods.force.start();
+    }
+    function tick (foci, varname, k) {
+      return function (e) {
+        data.forEach(function(o, i) {
+          var f = foci[o[varname]];
+          o.y += (f.y - o.y) * k * e.alpha;
+          o.x += (f.x - o.x) * k * e.alpha;
+        });
+        nodes
+          .each(collide(.1))
+          .attr("cx", function (d) { return d.x; })
+          .attr("cy", function (d) { return d.y; });
+        labels
+          .each(collide(.1))
+          .attr("x", function (d) { return d.x; })
+          .attr("y", function (d) { return d.y; });
+      }
+    }
+    function collide(alpha) {
+      var quadtree = d3.geom.quadtree(data);
+      return function(d) {
+        var r = d.radius + maxRadius + padding,
+            nx1 = d.x - r,
+            nx2 = d.x + r,
+            ny1 = d.y - r,
+            ny2 = d.y + r;
+        quadtree.visit(function(quad, x1, y1, x2, y2) {
+          if (quad.point && (quad.point !== d)) {
+            var x = d.x - quad.point.x,
+                y = d.y - quad.point.y,
+                l = Math.sqrt(x * x + y * y),
+                r = d.radius + quad.point.radius + padding;
+            if (l < r) {
+              l = (l - r) / l * alpha;
+              d.x -= x *= l;
+              d.y -= y *= l;
+              quad.point.x += x;
+              quad.point.y += y;
+            }
+          }
+          return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+        });
+      };
+    }                           
+},
+oldData: ""
+};
+
+$.fn.bubble = function(methodOrOptions) {
+    if ( methods[methodOrOptions] ) {
+        return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
+    } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
+        // Default to "init"
+        return methods.init.apply( this, arguments );
+    } else {
+        $.error( 'Method ' +  methodOrOptions + ' does not exist' );
+    }    
+};
+})(jQuery);
+
+var dataChartuserartistas = eval(jsonbothusersartist);
+//alert(dataChartuserartistas);
+//console.log(dataChartuserartistas);
+
+var clone = jQuery.extend(true, {}, dataChartuserartistas);
+//__invoke bubble
+$('[data-role="bubble"]').each(function(index) {
+    var selector = "bubble"+index;
+    $(this).attr("id", selector);
+    var options = {
+        data: clone[0].data,
+        width: $(this).data("width"),
+        height: $(this).data("height")
+    }
+    $("#"+selector).bubble(options);
+});
+$(".testers a").on( "click", function(e) {
+e.preventDefault();
+var clone = jQuery.extend(true, {}, dataChartuserartistas);
+var min = 0;
+var max = 3;
+//__invoke bubble
+$('[data-role="bubble"]').each(function(index) {
+    pos = Math.floor(Math.random() * (max - min + 1)) + min;
+    $("#"+$(this).attr("id")).bubble('update', clone[pos].data);
+});
+}); 
+});
+    
+        for (var i = 0; i < $('.bubbles').children().length; i++) {
+            $('.node').css('background-image', 'url(' + topartistsboth[i].image + ')');
+        }
+        
+      
+}
+
 
 
 // ---------------------------------------------------------------------------------------------------------

@@ -160,14 +160,15 @@ function processUser1TopArtists(data) {
             }
         }
     }
-
-    /*var jsonuserartistas = "[{ \"data\":  ["+userartist+"]}];";*/
-
+    
+    
+    
+/* CHECK DE ARTISTAS DO USER 1
     for (var i = 0; i < topartists1.length; i++) {
         var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartists1[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartists1[i].plays + "</div></div>";
         $('.artists-1').append(htmlString);
     }
-
+*/
     procurauser2artistas();
 
 }
@@ -210,13 +211,13 @@ function processUser2TopArtists(data) {
         }
     }
 
-    /*var jsonuserartistas = "[{ \"data\":  ["+userartist+"]}];";*/
+/* CHECK ARTISTAS USER 2
 
     for (var i = 0; i < topartists2.length; i++) {
         var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartists2[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartists2[i].plays + "</div></div>";
         $('.artists-2').append(htmlString);
     }
-
+*/
 
     generateTop10();
 }
@@ -240,9 +241,8 @@ function generateTop10() {
 
     console.log(topartistsboth);
     topartistsboth.sort(function (a, b) {
-
         // convert to integers from strings
-        a = parseFloat(a.plays / );
+        a = parseFloat(a.plays);
         b = parseFloat(b.plays);
         // compare
         if (a > b) {
@@ -254,8 +254,9 @@ function generateTop10() {
         }
     });
 
+    
 
-    for (var i = 0; i < topartistsboth.length; i++) {
+    for (var i = 0; i < 10; i++) {
         var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartistsboth[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartistsboth[i].plays + "</div></div>";
         console.log(htmlString);
         $('.artists-both').append(htmlString);
@@ -266,11 +267,11 @@ function generateTop10() {
     $(".page-content").show();
 }
 
-/*
+
 // ---------------------------------------------------------------------------------------------------------
 // USER top tracks
 // ---------------------------------------------------------------------------------------------------------
-
+/*
 
 function procurausermusicas() {
     username1 = $("#name").val();

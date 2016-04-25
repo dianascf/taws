@@ -1,7 +1,16 @@
 body {
-  font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: black;
     text-decoration: none;
+}
+
+.login {
+    height:100vh;
+}
+.title  {
+    width: 80%;
+    margin-top: 20vh; 
+    position: fixed;
 }
 
 #title {
@@ -12,37 +21,44 @@ body {
     width: 100%;
     height: 100%;
     display: block;
-    margin-top: 20%;
     text-align: center;
     margin-left: auto;
-    margin-right: auto;    
+    margin-right: auto;
 }
 
 #slogan {
     font-weight: 300;
-    font-size: 2vw; 
+    font-size: 2vw;
     width: 100%;
     height: 100%;
     display: block;
     text-align: center;
     margin-left: auto;
-    margin-right: auto;    
+    margin-right: auto;
+    margin-bottom: 10%;
 }
 
-textarea:focus, input:focus, button:focus{
+textarea:focus,
+input:focus,
+button:focus {
     outline: none;
 }
 
-input{
-     font-weight: 300;
-    font-size: 1.5vw; 
-    width: 100%;
-    height: 100%;
+.users {
+    margin-top: 35%;
+}
+
+
+input {
+    font-weight: 300;
+    font-size: 1.5vw;
+    width: 50%;
+    height: 50%;
     display: block;
     text-align: center;
     margin-left: auto;
-    margin-right: auto; 
-    margin-top: 20%;
+    margin-right: auto;
+    margin-top: 10%;
     margin-bottom: 10%;
     border-top: none;
     border-left: none;
@@ -50,9 +66,9 @@ input{
     border-bottom: 1px solid black;
 }
 
-button{
+button {
     font-weight: 300;
-    font-size: 1.5vw; 
+    font-size: 1.5vw;
     width: 50%;
     height: 100%;
     display: block;
@@ -60,6 +76,82 @@ button{
     text-decoration: none;
     text-align: center;
     margin-left: auto;
-    margin-right: auto; 
+    margin-right: auto;
     background-color: white;
+    margin-bottom: 10%;
+}
+
+select {
+    font-weight: 300;
+    font-size: 1.5vw;
+    width: 60%;
+    height: 100%;
+    display: block;
+    border: 1px solid black;
+    text-decoration: none;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    margin-bottom: 10%;
+}
+
+a, a:hover{
+  text-decoration: none;
+    color: black;
+}
+
+
+.album-page{
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+.album-info {
+    margin-top: 45%;
+    margin-bottom: 5%;
+    color:black;
+    text-align: center;
+
+}
+
+.img{
+    margin-top: 15%;
+}
+
+.page-load p{
+    font-weight: 300;
+    width: 100%;
+    height: 100%;
+    display: block;
+    text-align: center;
+    margin: 30% auto auto auto;
+}
+
+.playlist-page{
+    margin-top: 10%;
+}
+
+.img-track{
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+    margin-bottom: 10%;
+    
+}
+
+.track-number{
+    margin-top: 5%;
+     text-align: center;
+}
+.track-info{
+    margin-top: 5%;
+}
+
+.bubble{
+    margin-top: 3%;
 }

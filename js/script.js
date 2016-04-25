@@ -27,9 +27,9 @@ var playcount2;
 var period;
 
 $(function () {
-    
+
     $("#login-spotify").click(showUser1);
-    
+
     $("#getuser1").click(procurauser1info);
     $("#getuser2").click(procurauser2info);
     $("#generate").click(generatePage);
@@ -53,10 +53,24 @@ $(function () {
 // ---------------------------------------------------------------------------------------------------------
 
 function showUser1() {
-     $("#login-spotify").hide();
+    $(".login").animate({
+        height: 5
+    }, 500);
+    $(".title").animate({
+        marginTop: 10
+    }, 500);
+    
+    $(".users").animate({
+        marginTop: 150
+    }, 500);
+
+    $("#title").animate({
+        fontSize: 20
+    }, 500);
+    $("#login-spotify").hide();
     $(".user1").show();
     $("#slogan").hide();
- }
+}
 
 function procurauser1info() {
     username1 = $("#name1").val();
@@ -83,19 +97,19 @@ function processUser1Info(info) {
         log("Erro: " + info.error.message);
         //searchAgain();
     } else {
+        $(".user1").removeClass("col-md-offset-3");
         $(".user2").show();
         var name1 = info.user.name;
         var realname1 = info.user.realname;
         var url1 = info.user.url;
         var img1 = info.user.image[3]["#text"];
         playcount1 = info.user.playcount;
-        $(".nome1").html("<a href='"+url1+"'>"+realname1+" </a>"); 
-        $("#img1").html("<img width:'70px'height:'70px' src='"+img1+"' >");
-        
+
+        $("#img1").html("<img class='center-block' src='" + img1 + "' >");
+
     }
 
 }
-
 
 
 function procurauser2info() {
@@ -127,8 +141,7 @@ function processUser2Info(info) {
         var url2 = info.user.url;
         var img2 = info.user.image[3]["#text"];
         playcount2 = info.user.playcount;
-        $(".nome2").html("<a href='"+url2+"'>"+realname2+" </a>");
-        $("#img2").html("<img width:'70px'height:'70px' src='"+img2+"' >");
+        $("#img2").html("<img class='center-block' src='" + img2 + "' >");
     }
 }
 
@@ -139,7 +152,8 @@ function timeSelector() {
 
 function generatePage() {
     $(".page-load").show();
-    $(".login").hide();
+    $(".users").hide();
+    $("#status").hide();
     $(".page-content").hide();
 
     procurauser1artistas();
@@ -174,7 +188,6 @@ function getUser1TopArtists() {
         .fail(logError("obter artistas do utilizador " + username1));
 
 }
-
 
 
 function processUser1TopArtists(data) {
@@ -292,7 +305,8 @@ function generateTop10Artists() {
     }
 
     $(".page-load").hide();
-    $(".login").hide();
+    $(".users").hide();
+    $("#status").hide();
     $(".page-content").show();
     $(".album-page").hide();
     $(".playlist-page").hide();
@@ -616,9 +630,6 @@ function processBothUsersTopArtists() {
 
 
 
-
-
-
 // ---------------------------------------------------------------------------------------------------------
 // USER top album
 // ---------------------------------------------------------------------------------------------------------
@@ -741,7 +752,7 @@ function generateTopAlbum() {
     });
 
     if (topalbumsboth[0] != undefined) {
-        var htmlString = "<div class=\"row\"><div class=\"col-md-3 img\"> <img class=\"img-album\" src=" + topalbumsboth[0].image + "/></div> <div class=\"row album-info\">" + topalbumsboth[0].artist + " — " + topalbumsboth[0].album + "</div>";
+        var htmlString = "<div class=\"row\"><div class=\" col-md-6 col-md-offset-3 img\"> <img class=\"img-album center-block\" src=" + topalbumsboth[0].image + "/></div> <p class=\"row album-info\">" + topalbumsboth[0].artist + " — " + topalbumsboth[0].album + "</p>";
         $('.album-page').prepend(htmlString);
     }
     $(".page-load").hide();
@@ -841,7 +852,7 @@ function processUser2TopTracks(data) {
 function generateTopPlaylist() {
 
     var add = 0;
-    
+
     for (var i = 0; i < toptracks1.length; i++) {
         for (var i2 = 0; i2 < toptracks2.length; i2++) {
             if (toptracks1[i].track == toptracks2[i2].track && toptracks1[i].artistid == toptracks2[i2].artistid) {
@@ -869,43 +880,43 @@ function generateTopPlaylist() {
             }
         }
     }
-    
-/* ————————————————————————PARA MELHORAR O ALGORITMO
-    var i = 0;
-    while (playlistArray.length < 10) {
-        var check = false;
-        for (var i2 = 0; i2 < playlistArray.length; i3++) {
-            if (topartistsboth[i].artistid == playlistArray[i2].artistid) {
-                check = true;
-                break;
-            }
-        }
 
-        if (!check) {
-
-            for (var i3 = 0; i3 < toptracks1.length; i3++) {
-                for (var i4 = 0; i4 < toptracks2.length; i4++) {
-                    if (toptracks1[i3].track == toptracks2[i4].track && toptracks1[i3].artistid == toptracks2[i4].artistid && topartistsboth[i].artist == toptracks1[i3].artist) {
-                        playlistArray[add] = {
-                            track: toptracks1[i].track,
-                            artist: toptracks1[i].artist,
-                            artistid: toptracks1[i].artistid,
-                            plays: parseFloat(toptracks1[i].plays / playcount1) + parseFloat(toptracks2[i2].plays / playcount2),
-                            image: toptracks1[i].image
-                        }
-                        add++;
-
-                        console.log("YASS");
-                        console.log(toptracks1[i].track + "  — " + toptracks1[i].artist);
-                    }
+    /* ————————————————————————PARA MELHORAR O ALGORITMO
+        var i = 0;
+        while (playlistArray.length < 10) {
+            var check = false;
+            for (var i2 = 0; i2 < playlistArray.length; i3++) {
+                if (topartistsboth[i].artistid == playlistArray[i2].artistid) {
+                    check = true;
+                    break;
                 }
-
             }
+
+            if (!check) {
+
+                for (var i3 = 0; i3 < toptracks1.length; i3++) {
+                    for (var i4 = 0; i4 < toptracks2.length; i4++) {
+                        if (toptracks1[i3].track == toptracks2[i4].track && toptracks1[i3].artistid == toptracks2[i4].artistid && topartistsboth[i].artist == toptracks1[i3].artist) {
+                            playlistArray[add] = {
+                                track: toptracks1[i].track,
+                                artist: toptracks1[i].artist,
+                                artistid: toptracks1[i].artistid,
+                                plays: parseFloat(toptracks1[i].plays / playcount1) + parseFloat(toptracks2[i2].plays / playcount2),
+                                image: toptracks1[i].image
+                            }
+                            add++;
+
+                            console.log("YASS");
+                            console.log(toptracks1[i].track + "  — " + toptracks1[i].artist);
+                        }
+                    }
+
+                }
+            }
+        i++;
         }
-    i++;
-    }
-    
-*/
+        
+    */
 
 
 
@@ -927,7 +938,7 @@ function generateTopPlaylist() {
 
     for (var i = 0; i < 10; i++) {
         if (playlistArray[i] != undefined) {
-            var htmlString = "<div class=\"row\"><div class=\"col-md-3 img-track\"> <img class=\"img-album\" src=\"" + playlistArray[i].image + "\"/></div> <div class=\"row track-info\">" + playlistArray[i].artist + " — " + playlistArray[i].track + "</div>";
+            var htmlString = "<div class=\"row\"><div class=\"col-md-4 \"> <img class=\"img-track\" src=\"" + playlistArray[i].image + "\"/></div> <div class=\"col-md-1 row track-number\">" + (i+1) + "</div> <div class=\"col-md-6 col-md-offset-1 row track-info\">" + playlistArray[i].artist + " — " + playlistArray[i].track + "</div>";
             console.log(htmlString);
             $('.playlist-page').append(htmlString);
         }

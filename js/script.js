@@ -27,7 +27,9 @@ var playcount2;
 var period;
 
 $(function () {
-    // user 1
+    
+    $("#login-spotify").click(showUser1);
+    
     $("#getuser1").click(procurauser1info);
     $("#getuser2").click(procurauser2info);
     $("#generate").click(generatePage);
@@ -37,6 +39,7 @@ $(function () {
 
 
     //outras
+    $(".user1").hide();
     $(".user2").hide();
     $(".page-load").hide();
     $(".page-content").hide();
@@ -48,6 +51,12 @@ $(function () {
 // ---------------------------------------------------------------------------------------------------------
 // Info USERs
 // ---------------------------------------------------------------------------------------------------------
+
+function showUser1() {
+     $("#login-spotify").hide();
+    $(".user1").show();
+    $("#slogan").hide();
+ }
 
 function procurauser1info() {
     username1 = $("#name1").val();
@@ -80,6 +89,9 @@ function processUser1Info(info) {
         var url1 = info.user.url;
         var img1 = info.user.image[3]["#text"];
         playcount1 = info.user.playcount;
+        $(".nome1").html("<a href='"+url1+"'>"+realname1+" </a>"); 
+        $("#img1").html("<img width:'70px'height:'70px' src='"+img1+"' >");
+        
     }
 
 }
@@ -110,12 +122,13 @@ function processUser2Info(info) {
         searchAgain();
     } else {
         $("#time-selector").show();
-        var name1 = info.user.name;
-        var realname1 = info.user.realname;
-        var url1 = info.user.url;
-        var img1 = info.user.image[3]["#text"];
+        var name2 = info.user.name;
+        var realname2 = info.user.realname;
+        var url2 = info.user.url;
+        var img2 = info.user.image[3]["#text"];
         playcount2 = info.user.playcount;
-
+        $(".nome2").html("<a href='"+url2+"'>"+realname2+" </a>");
+        $("#img2").html("<img width:'70px'height:'70px' src='"+img2+"' >");
     }
 }
 

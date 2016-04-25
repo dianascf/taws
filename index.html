@@ -3,14 +3,17 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
 
-
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900italic,900,700italic,500italic,400italic,300italic,300,100italic,100' rel='stylesheet' type='text/css'>
+    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
     <title>MusicMates</title>
 </head>
 
@@ -20,18 +23,27 @@
         <div class="container login">
 
             <div class="title col-md-8 col-md-offset-2">
-                <a href="index.html" id="titulo">MusicMates</a>
+                <a href="index.html" id="title">M U S I C &nbsp;  M A T E S</a>
+                <p id="slogan">Two mates. &nbsp; &nbsp; &nbsp; One playlist.</p>
+                <button type="button" class="button" id="login-spotify">Login with Spotify</button>
             </div>
             <div class="row artists">
                 <div class="user1 col-md-4 col-md-offset-4">
                     <input type="text" class="input" placeholder="Utilizador 1" id="name1" />
                     <button type="button" class="button" id="getuser1">Pesquisar</button>
                 </div>
-
+                
+<div id="img1"></div>
+                 <div class="nome1"></div>
+                
                 <div class="user2 col-md-4 col-md-offset-4">
                     <input type="text" class="input" placeholder="Utilizador 2" id="name2" />
                     <button type="button" class="button" id="getuser2">Pesquisar</button>
                 </div>
+                
+                <div id="img2"></div>
+                 <div class="nome2"></div>
+                
             </div>
 
 
@@ -43,7 +55,9 @@
                 <option value="overall">all time</option>
             </select>
 
-            <button type="button" class="button" id="generate">Generate a mix</button>
+            <div class="user2 col-md-4 col-md-offset-4">
+                 <button type="button" class="button" id="generate">Generate a mix</button>
+             </div>
 
             <div id="status"></div>
         </div>

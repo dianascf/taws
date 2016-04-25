@@ -7,14 +7,16 @@ var username1;
 var username2;
 
 var topartists1 = new Array();
-var toptracks1 = {};
-var topalbums1 = {};
+var toptracks1 = new Array();
+var topalbums1 = new Array();
 
 var topartists2 = new Array();
-var toptracks2 = {};
-var topalbums2 = {};
+var toptracks2 = new Array();
+var topalbums2 = new Array();
 
 var topartistsboth = [];
+var topalbumsboth = [];
+var playlistArray = [];
 
 var data1;
 var data2;
@@ -27,6 +29,9 @@ $(function () {
     $("#getuser1").click(procurauser1info);
     $("#getuser2").click(procurauser2info);
     $("#generate").click(generatePage);
+    $("#generate-album").click(generateAlbum);
+    $("#generate-playlist").click(generatePlaylist);
+    
 
     //outras
     $(".user2").hide();
@@ -160,15 +165,15 @@ function processUser1TopArtists(data) {
             }
         }
     }
-    
-    
-    
-/* CHECK DE ARTISTAS DO USER 1
-    for (var i = 0; i < topartists1.length; i++) {
-        var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartists1[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartists1[i].plays + "</div></div>";
-        $('.artists-1').append(htmlString);
-    }
-*/
+
+
+
+    /* CHECK DE ARTISTAS DO USER 1
+        for (var i = 0; i < topartists1.length; i++) {
+            var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartists1[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartists1[i].plays + "</div></div>";
+            $('.artists-1').append(htmlString);
+        }
+    */
     procurauser2artistas();
 
 }
@@ -211,20 +216,20 @@ function processUser2TopArtists(data) {
         }
     }
 
-/* CHECK ARTISTAS USER 2
+    /* CHECK ARTISTAS USER 2
 
-    for (var i = 0; i < topartists2.length; i++) {
-        var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartists2[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartists2[i].plays + "</div></div>";
-        $('.artists-2').append(htmlString);
-    }
-*/
+        for (var i = 0; i < topartists2.length; i++) {
+            var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartists2[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartists2[i].plays + "</div></div>";
+            $('.artists-2').append(htmlString);
+        }
+    */
 
-    generateTop10();
+    generateTop10Artists();
 }
 
 
 
-function generateTop10() {
+function generateTop10Artists() {
 
     var add = 0;
     for (var i = 0; i < topartists1.length; i++) {
@@ -239,7 +244,6 @@ function generateTop10() {
         }
     }
 
-    console.log(topartistsboth);
     topartistsboth.sort(function (a, b) {
         // convert to integers from strings
         a = parseFloat(a.plays);
@@ -254,23 +258,305 @@ function generateTop10() {
         }
     });
 
-    
+
 
     for (var i = 0; i < 10; i++) {
         var htmlString = "<div class=\"row\"><div class=\"col-md-3 order\">" + i + "</div> <div class=\"col-md-7 artist-name\">" + topartistsboth[i].artist + "</div> <div class=\"col-md-2 artist-plays\">" + topartistsboth[i].plays + "</div></div>";
-        console.log(htmlString);
         $('.artists-both').append(htmlString);
     }
 
     $(".page-load").hide();
     $(".login").hide();
     $(".page-content").show();
+    $(".album-page").hide();
+    $(".playlist-page").hide();
 }
 
+
+
+
+
+
+
+// ---------------------------------------------------------------------------------------------------------
+// USER top album
+// ---------------------------------------------------------------------------------------------------------
+
+function generateAlbum() {
+
+    $(".artists-page").hide();
+    $(".generate-playlist").hide();
+    $(".page-load").show();
+    getUser1TopAlbum();
+
+}
+
+
+function getUser1TopAlbum() {
+
+    data1 = {
+        api_key: apikey,
+        method: "user.getTopAlbums",
+        user: username1,
+        period: "overall",
+        limit: 100,
+        format: "json"
+    };
+
+    $.get(base_url, data1)
+        .done(processUser1TopAlbums)
+        .fail(logError("obter album do utilizador " + username1));
+
+}
+
+
+
+function processUser1TopAlbums(data) {
+
+    if ($.isArray(data.topalbums.album)) {
+        for (var i = 0; i < data.topalbums.album.length; i++) {
+            topalbums1[i] = {
+                album: data.topalbums.album[i].name,
+                artist: data.topalbums.album[i].artist.name,
+                artistid: data.topalbums.album[i].artist.mbid,
+                plays: data.topalbums.album[i].playcount,
+                image: data.topalbums.album[i].image[3]["#text"]
+            }
+        }
+    }
+
+    getUser2TopAlbum();
+}
+
+
+
+function getUser2TopAlbum() {
+
+    data2 = {
+        api_key: apikey,
+        method: "user.getTopAlbums",
+        user: username2,
+        period: "overall",
+        limit: 100,
+        format: "json"
+    };
+
+    $.get(base_url, data2)
+        .done(processUser2TopAlbums)
+        .fail(logError("obter album do utilizador " + username1));
+
+}
+
+
+
+function processUser2TopAlbums(data) {
+
+    if ($.isArray(data.topalbums.album)) {
+        for (var i = 0; i < data.topalbums.album.length; i++) {
+            topalbums2[i] = {
+                album: data.topalbums.album[i].name,
+                artist: data.topalbums.album[i].artist.name,
+                artistid: data.topalbums.album[i].artist.mbid,
+                plays: data.topalbums.album[i].playcount,
+                image: data.topalbums.album[i].image[3]["#text"]
+            }
+        }
+    }
+
+    generateTopAlbum();
+}
+
+
+function generateTopAlbum() {
+
+    
+    var add = 0;
+    for (var i = 0; i < topalbums1.length; i++) {
+        for (var i2 = 0; i2 < topalbums2.length; i2++) {
+            if (topalbums1[i].album == topalbums2[i2].album && topalbums1[i].artistid == topalbums2[i2].artistid) {
+                topalbumsboth[add] = {
+                    album: topalbums1[i].album,
+                    artist: topalbums1[i].artist,
+                    artistid: topalbums1[i].artistid,
+                    plays: parseFloat(topalbums1[i].plays / playcount1) + parseFloat(topalbums2[i2].plays / playcount2),
+                    image: topalbums1[i].image
+                    }
+            }
+        }
+    }
+
+    topalbumsboth.sort(function (a, b) {
+        // convert to integers from strings
+        a = parseFloat(a.plays);
+        b = parseFloat(b.plays);
+        // compare
+        if (a > b) {
+            return -1;
+        } else if (a < b) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    var htmlString = "<div class=\"row\"><div class=\"col-md-3 img\"> <img class=\"img-album\" src=" + topalbumsboth[0].image + "/></div> <div class=\"row album-info\">" + topalbumsboth[0].artist + " — " + topalbumsboth[0].album + "</div>";
+    $('.album-page').append(htmlString);
+    $(".page-load").hide();
+    $(".album-page").show();
+}
 
 // ---------------------------------------------------------------------------------------------------------
 // USER top tracks
 // ---------------------------------------------------------------------------------------------------------
+
+
+function generatePlaylist() {
+
+    $(".artists-page").hide();
+    $(".album-page").hide();
+    $(".page-load").show();
+    getUser1TopTracks();
+
+}
+
+
+function getUser1TopTracks() {
+
+    data1 = {
+        api_key: apikey,
+        method: "user.getTopTracks",
+        user: username1,
+        period: "overall",
+        limit: 200,
+        format: "json"
+    };
+
+    $.get(base_url, data1)
+        .done(processUser1TopTracks)
+        .fail(logError("obter faixas favoritas do utilizador " + username1));
+
+}
+
+
+
+function processUser1TopTracks(data) {
+
+    if ($.isArray(data.toptracks.track)) {
+        for (var i = 0; i < data.toptracks.track.length; i++) {
+            toptracks1[i] = {
+                track: data.toptracks.track[i].name,
+                artist: data.toptracks.track[i].artist.name,
+                artistid: data.toptracks.track[i].artist.mbid,
+                plays: data.toptracks.track[i].playcount,
+                image: data.toptracks.track[i].image[3]["#text"]
+            }
+        }
+    }
+
+    getUser2TopTracks();
+}
+
+
+
+function getUser2TopTracks() {
+
+    data2 = {
+        api_key: apikey,
+        method: "user.getTopTracks",
+        user: username2,
+        period: "overall",
+        limit: 200,
+        format: "json"
+    };
+
+    $.get(base_url, data2)
+        .done(processUser2TopTracks)
+        .fail(logError("obter faixas favoritas do utilizador " + username1));
+
+}
+
+
+
+function processUser2TopTracks(data) {
+
+    if ($.isArray(data.toptracks.track)) {
+        for (var i = 0; i < data.toptracks.track.length; i++) {
+            toptracks2[i] = {
+                track: data.toptracks.track[i].name,
+                artist: data.toptracks.track[i].artist.name,
+                artistid: data.toptracks.track[i].artist.mbid,
+                plays: data.toptracks.track[i].playcount,
+                image: data.toptracks.track[i].image[3]["#text"]
+            }
+        }
+    }
+
+    generateTopPlaylist();
+}
+
+
+function generateTopPlaylist() {
+    
+    var add = 0;
+    for (var i = 0; i < toptracks1.length; i++) {
+        for (var i2 = 0; i2 < toptracks2.length; i2++) {
+            if (toptracks1[i].track == toptracks2[i2].track && toptracks1[i].artistid == toptracks2[i2].artistid) {
+                console.log("YASS");
+                var check = false;
+                for (var i3 = 0; i3 < add; i++) {
+                    if(toptracks1[i].artist == playlistArray[i3].artist) {
+                        check = true;
+                        break;
+                    }
+                }
+                
+                if (!check) {
+                    playlistArray[add] = {
+                            track: toptracks1[i].track,
+                            artist: toptracks1[i].artist,
+                            artistid: toptracks1[i].artistid,
+                            plays: parseFloat(toptracks1[i].plays / playcount1) + parseFloat(toptracks2[i2].plays / playcount2),
+                            image: toptracks1[i].image
+                    }   
+                    
+                add++;
+                }
+            }
+        }
+    }
+
+    console.log(playlistArray);
+
+    playlistArray.sort(function (a, b) {
+        // convert to integers from strings
+        a = parseFloat(a.plays);
+        b = parseFloat(b.plays);
+        // compare
+        if (a > b) {
+            return -1;
+        } else if (a < b) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+
+    for(var i = 0; i < 10; i++) {
+        if(playlistArray[i] != undefined) {
+        var htmlString = "<div class=\"row\"><div class=\"col-md-3 img-track\"> <img class=\"img-album\" src=\"" + playlistArray[i].image + "\"/></div> <div class=\"row track-info\">" + playlistArray[i].artist + " — " + playlistArray[i].track + "</div>";
+        console.log(htmlString);
+        $('.playlist-page').append(htmlString);
+            }
+    }
+    
+    $(".page-load").hide();
+    $(".playlist-page").show();
+}
+
+
+
+
+
 /*
 
 function procurausermusicas() {

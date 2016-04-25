@@ -729,7 +729,7 @@ function generateTopAlbum() {
 
     if (topalbumsboth[0] != undefined) {
         var htmlString = "<div class=\"row\"><div class=\"col-md-3 img\"> <img class=\"img-album\" src=" + topalbumsboth[0].image + "/></div> <div class=\"row album-info\">" + topalbumsboth[0].artist + " — " + topalbumsboth[0].album + "</div>";
-        $('.album-page').append(htmlString);
+        $('.album-page').prepend(htmlString);
     }
     $(".page-load").hide();
     $(".album-page").show();
@@ -857,7 +857,7 @@ function generateTopPlaylist() {
         }
     }
     
-/*
+/* ————————————————————————PARA MELHORAR O ALGORITMO
     var i = 0;
     while (playlistArray.length < 10) {
         var check = false;

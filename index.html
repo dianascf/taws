@@ -6,7 +6,7 @@
 
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+
     <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -33,45 +33,54 @@
                     <button type="button" class="button" id="getuser2">Pesquisar</button>
                 </div>
             </div>
-            
+
+
+            <select class="dropdown" id="time-selector" placeholder="Select time period">
+                <option value="1month">last month</option>
+                <option value="3month">last three months</option>
+                <option value="6month">last six months</option>
+                <option value="12month">last year</option>
+                <option value="overall">all time</option>
+            </select>
+
             <button type="button" class="button" id="generate">Generate a mix</button>
-            
+
             <div id="status"></div>
         </div>
-        
-        
+
+
     </div>
-    
-    
+
+
     <div class="container-fluid page">
-        
+
         <div class="container page-load">
-        loading...
+            loading...
         </div>
-        
+
         <div class="container page-content">
-        
+
             <div class="artists-page">
-                
+
                 <div id="holder">
-            <div class="bubble" id="bubble" data-role="bubble" data-width=1000 data-height=600 ></div>
+                    <div class="bubble" id="bubble" data-role="bubble" data-width=1000 data-height=600></div>
                     <button type="button" class="button" id="generate-album">Continuar</button>
-                    
-        </div>
+
+                </div>
             </div>
-         
+
             <div class="album-page">
-            
-                
-            <button type="button" class="button" id="generate-playlist">Continuar</button>
+
+
+                <button type="button" class="button" id="generate-playlist">Continuar</button>
             </div>
             <div class="playlist-page">
-            
-            
+
+
             </div>
         </div>
-    
-    
+
+
     </div>
 
 </body>

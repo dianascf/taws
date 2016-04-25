@@ -4,16 +4,12 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="css/style.css" />
-
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900italic,900,700italic,500italic,400italic,300italic,300,100italic,100' rel='stylesheet' type='text/css'>
-    
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
     <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="js/script.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    
     <title>MusicMates</title>
 </head>
 
@@ -22,79 +18,72 @@
     <div class="container-fluid">
         <div class="container login">
 
-            <div class="title col-md-8 col-md-offset-2">
+            <div class="title">
                 <a href="index.html" id="title">M U S I C &nbsp;  M A T E S</a>
                 <p id="slogan">Two mates. &nbsp; &nbsp; &nbsp; One playlist.</p>
-                <button type="button" class="button" id="login-spotify">Login with Spotify</button>
+               
             </div>
-            <div class="row artists">
-                <div class="user1 col-md-4 col-md-offset-4">
+            
+            <div class="row users">
+                
+                 <button type="button" class="button" id="login-spotify">Login with Spotify</button>
+                
+                <div class="user1 col-md-6 col-md-offset-3">
+                    <div id="img1"></div>
+                    
                     <input type="text" class="input" placeholder="Utilizador 1" id="name1" />
                     <button type="button" class="button" id="getuser1">Pesquisar</button>
                 </div>
-                
-<div id="img1"></div>
-                 <div class="nome1"></div>
-                
-                <div class="user2 col-md-4 col-md-offset-4">
+
+                <div class="user2 col-md-6 ">
+                    <div id="img2"></div>
+        
                     <input type="text" class="input" placeholder="Utilizador 2" id="name2" />
                     <button type="button" class="button" id="getuser2">Pesquisar</button>
                 </div>
                 
-                <div id="img2"></div>
-                 <div class="nome2"></div>
+                <div class="user2 col-md-4 col-md-offset-4">
+                <select class="dropdown" id="time-selector">
+                    <option>Select time period</option>
+                    <option value="overall">all time</option>
+                    <option value="12month">last year</option>
+                    <option value="6month">last six months</option>
+                    <option value="3month">last three months</option>
+                    <option value="1month">last month</option>
+                </select>
+            </div>
+
+            <div class="user2 col-md-4 col-md-offset-4">
+                <button type="button" class="button" id="generate">Generate a mix</button>
+            </div>
                 
             </div>
 
-
-            <select class="dropdown" id="time-selector" placeholder="Select time period">
-                <option value="1month">last month</option>
-                <option value="3month">last three months</option>
-                <option value="6month">last six months</option>
-                <option value="12month">last year</option>
-                <option value="overall">all time</option>
-            </select>
-
-            <div class="user2 col-md-4 col-md-offset-4">
-                 <button type="button" class="button" id="generate">Generate a mix</button>
-             </div>
-
             <div id="status"></div>
         </div>
-
-
     </div>
 
 
     <div class="container-fluid page">
-
         <div class="container page-load">
-            loading...
+            <p>loading...</p>
         </div>
 
         <div class="container page-content">
-
             <div class="artists-page">
-
                 <div id="holder">
-                    <div class="bubble" id="bubble" data-role="bubble" data-width=1000 data-height=600></div>
+                    <div class="bubble" id="bubble" data-role="bubble" data-width=1000 data-height=500></div>
                     <button type="button" class="button" id="generate-album">Continuar</button>
-
                 </div>
             </div>
 
             <div class="album-page">
-
-
                 <button type="button" class="button" id="generate-playlist">Continuar</button>
             </div>
-            <div class="playlist-page">
-
-
-            </div>
+            
+            <div class="playlist-page col-md-8 col-md-offset-2">
+            </div> 
         </div>
-
-
     </div>
 
 </body>

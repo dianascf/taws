@@ -6,85 +6,145 @@
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,900italic,900,700italic,500italic,400italic,300italic,300,100italic,100' rel='stylesheet' type='text/css'>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" src="jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
+    <script src="js/spotify-web-api.js"></script>
+    <script src="js/oauth.js"></script>
     <title>MusicMates</title>
 </head>
 
 <body>
-
-    <div class="container-fluid">
+    <div class="container-fluid header">
         <div class="container login">
 
             <div class="title">
                 <a href="index.html" id="title">M U S I C &nbsp;  M A T E S</a>
                 <p id="slogan">Two mates. &nbsp; &nbsp; &nbsp; One playlist.</p>
-               
+
+                <div id="user-profile" class="circular">
+                    <div class="pull-right">
+                        <img class="media-object profilepic" />
+                        <p id="spotifyname"></p>
+                        <p id="userid"></p>
+                        <p id="access-token"></p>
+                    </div>
+                </div>
+                <div style="display:none;" id="oauth">
+                </div>
             </div>
-            
+
             <div class="row users">
-                
-                 <button type="button" class="button" id="login-spotify">Login with Spotify</button>
-                
+
+
+                <button class="button" id="login-spotify">Login with Spotify</button>
+
+
                 <div class="user1 col-md-6 col-md-offset-3">
+
                     <div id="img1"></div>
-                    
-                    <input type="text" class="input" placeholder="Utilizador 1" id="name1" />
-                    <button type="button" class="button" id="getuser1">Pesquisar</button>
+
+                    <input type="text" class="input" placeholder="Your last.fm username" id="name1" />
+                    <button class="button" id="getuser1">Search</button>
                 </div>
 
                 <div class="user2 col-md-6 ">
                     <div id="img2"></div>
-        
-                    <input type="text" class="input" placeholder="Utilizador 2" id="name2" />
-                    <button type="button" class="button" id="getuser2">Pesquisar</button>
+
+                    <input type="text" class="input" placeholder="Your friend's last.fm" id="name2" />
+                    <button class="button" id="getuser2">Search</button>
                 </div>
-                
+
                 <div class="user2 col-md-4 col-md-offset-4">
-                <select class="dropdown" id="time-selector">
-                    <option>Select time period</option>
-                    <option value="overall">all time</option>
-                    <option value="12month">last year</option>
-                    <option value="6month">last six months</option>
-                    <option value="3month">last three months</option>
-                    <option value="1month">last month</option>
-                </select>
-            </div>
+                    <select class="dropdown" id="time-selector">
+                        <option>Select a time period</option>
+                        <option value="overall">All time</option>
+                        <option value="12month">Last year</option>
+                        <option value="6month">Last six months</option>
+                    </select>
+                </div>
 
-            <div class="user2 col-md-4 col-md-offset-4">
-                <button type="button" class="button" id="generate">Generate a mix</button>
-            </div>
-                
-            </div>
+                <div class="user2 col-md-4 col-md-offset-4">
+                    <button class="button" id="generate">Generate a mix</button>
+                </div>
 
-            <div id="status"></div>
+                <div id="status"></div>
+            </div>
         </div>
     </div>
 
-
     <div class="container-fluid page">
+
         <div class="container page-load">
-            <p>loading...</p>
+            <p>Loading...</p>
+        </div>
+
+        <div class="container mix-load">
+            <p>Your mix is loading...</p>
+        </div>
+
+        <div class="container error">
+            <div class="row">
+                <p>Sorry, we couldn't find anything in common.
+                    <br> But try another friend!</p>
+                <button class="button-center" id="error">Refresh page</button>
+            </div>
         </div>
 
         <div class="container page-content">
             <div class="artists-page">
+                <h1>10 artists in common...</h1>
                 <div id="holder">
                     <div class="bubble" id="bubble" data-role="bubble" data-width=1000 data-height=500></div>
-                    <button type="button" class="button" id="generate-album">Continuar</button>
+                    <button class="button-right-no-margin" id="generate-album">Next</button>
                 </div>
             </div>
 
             <div class="album-page">
-                <button type="button" class="button" id="generate-playlist">Continuar</button>
+                <h1>An album to share...</h1>
+                <h2 class="album-info"></h2>
+                <div id="results"></div>
+                <p class="play">Click on the cover to ear a preview.</p>
+                <button class="button-left" id="regenerate">Back</button>
+                <button class="button-right" id="generate-playlist">Next</button>
             </div>
-            
-            <div class="playlist-page col-md-8 col-md-offset-2">
-            </div> 
+
+            <div class="playlist-page">
+                <div id="playlist-results" class="row"></div>
+                <p class="play">Click on the cover to hear a preview.</p>
+                <button class="button-left" id="regenerate-album">Back</button>
+                <button class="button-right" id="generate-track">Next</button>
+            </div>
+
+            <div class="save-playlist">
+                <div class="row">
+                    <h3>Save this playlist!</h3>
+                    <button class="button-center" id="save-button">Save</button>
+                </div>
+            </div>
+
+            <div class="saved">
+                <div class="row">
+                    <h3>Saved!</h3>
+                    <p>Please check your Spotify application to see your playlist!</p>
+                    <button class="button-center" id="reload">Try again</button>
+                </div>
+            </div>
         </div>
     </div>
+
+
+    <script id="results-template" type="text/x-handlebars-template">
+        {{#each albums.items}} {{#if @first}}
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 img">
+                <div style="background-image:url({{images.0.url}})" data-album-id="{{id}}" class="cover"></div>
+            </div>
+            {{/if}} {{/each}}
+    </script>
+
+    <script type="text/javascript" src="js/script.js"></script>
 
 </body>
 
